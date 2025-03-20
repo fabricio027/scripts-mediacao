@@ -99,13 +99,15 @@ func generateList() []string {
 }
 
 func generateListOld(filesFTTX string) []string {
-	file, err := os.Create(fileListFTTX)
-	if err != nil {
-		panic(err)
+	if _, err := os.Stat(filesFTTX); err != nil {
+		file, err := os.Create(fileListFTTX)
+		if err != nil {
+			panic(err)
+		}
+		file.Close()
 	}
-	file.Close()
 
-	file, err = os.Open(filesFTTX)
+	file, err := os.Open(filesFTTX)
 	if err != nil {
 		panic(err)
 	}
