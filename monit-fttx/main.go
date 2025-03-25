@@ -3,42 +3,39 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log/slog"
 	"os"
+	"strings"
 	"time"
 )
 
 const DirCollFTTX string = "/mediacao/oi/infraco/move/fttx/bruto"
-
-// const DirCollFTTX string = "C:\\Users\\oi414774\\Desktop\\Fabricio\\scripts\\go\\banco"
 const fileListFTTX string = "/tmp/filesFTTX.tmp"
 
-// const fileListFTTX string = "scripts\\filesFTTX.tmp"
-
-var ListFilesFTTX []string = generateList()
+var ListFilesFTTX []string
 var FilesWithoutColl []string
 
 func main() {
+	ListFilesFTTX = generateList()
 	ListFilesFTTX = removeDuplicate()
 	FilesWithoutColl = verifyFilesWithoutColl()
 
-	fmt.Println("== VERIFICANDO STATUS COLETA FTTX ==")
-	fmt.Println()
+	slog.Info("Verificando status da coleta FTTX.")
 	if len(FilesWithoutColl) == 0 {
-		fmt.Println("Sem arquivos FTTX em atraso.")
+		slog.Info("Sem arquivos FTTX em atraso.")
 	} else {
-		fmt.Println("Segue(m) arquivo(s) pendente(s) de coleta:")
+		slog.Info("Segue(m) arquivo(s) pendente(s) de coleta:")
 		print()
 	}
 
 	writeFile()
-	fmt.Println()
-	fmt.Println("== Fim do programa ==")
+	slog.Info("Fim do programa")
 
 }
 
 func print() {
 	for _, line := range FilesWithoutColl {
-		fmt.Println(line)
+		slog.Info(strings.Split(line, "@")[0])
 	}
 }
 
